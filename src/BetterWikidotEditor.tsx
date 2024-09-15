@@ -18,7 +18,7 @@ export function BetterWikidotEditor() {
         setDoesEditorExist(true);
         setText(textarea.value);
       }
-    });
+    }, 100);
     return () => clearInterval(interval);
   }, [doesEditorExist]);
 
@@ -29,7 +29,9 @@ export function BetterWikidotEditor() {
       <div className="editor-container">
         <Editor text={text} setText={setText}></Editor>
       </div>
-      <div className="preview-container"></div>
+      <div className="preview-container">
+        <iframe src={window.location.href}></iframe>
+      </div>
     </div>
   );
 }
