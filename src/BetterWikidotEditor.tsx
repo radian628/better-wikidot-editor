@@ -3,5 +3,12 @@ import { Editor } from "./editor/Editor";
 
 export function BetterWikidotEditor() {
   const [text, setText] = useState("asdf");
-  return <Editor text={text} setText={setText}></Editor>;
+  return (
+    <div className="better-wikidot-editor-container">
+      <div className="editor-container">
+        <Editor text={text} setText={setText}></Editor>
+      </div>
+      <div className="preview-container"></div>
+    </div>
+  );
 }
