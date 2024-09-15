@@ -7,6 +7,7 @@ import { save } from "../save/save";
 export function Editor(props: {
   text: string;
   setText: (text: string) => void;
+  onSave: () => void;
 }) {
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -22,7 +23,9 @@ export function Editor(props: {
           {
             key: "Ctrl-s",
             run: (view) => {
-              save(view.state.doc.toString());
+              save(view.state.doc.toString()).then(() => {
+                props.onSave();
+              });
               return true;
             },
             preventDefault: true,
