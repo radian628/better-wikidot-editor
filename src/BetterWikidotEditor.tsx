@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Editor } from "./editor/Editor";
+import "./BetterWikidotEditor.less";
 
 export function BetterWikidotEditor() {
   const [text, setText] = useState("asdf");
