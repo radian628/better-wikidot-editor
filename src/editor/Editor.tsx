@@ -20,11 +20,12 @@ export function Editor(props: {
         keymap.of(defaultKeymap),
         keymap.of([
           {
-            key: "Ctrl-S",
+            key: "Ctrl-s",
             run: (view) => {
               save(view.state.doc.toString());
               return true;
             },
+            preventDefault: true,
           },
         ]),
       ],
