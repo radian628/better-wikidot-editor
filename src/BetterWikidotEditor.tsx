@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { Editor } from "./editor/Editor";
 
 export function BetterWikidotEditor() {
-  return <div>do this later</div>;
+  const [text, setText] = useState("asdf");
+  return <Editor text={text} setText={setText}></Editor>;
 }
