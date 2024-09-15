@@ -26,6 +26,7 @@ export function Editor(props: {
               return true;
             },
             preventDefault: true,
+            stopPropagation: true,
           },
         ]),
       ],
