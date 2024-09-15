@@ -30,7 +30,7 @@ export function BetterWikidotEditor() {
         <Editor text={text} setText={setText}></Editor>
       </div>
       <div className="preview-container">
-        <iframe src={window.location.href}></iframe>
+        <iframe className="page-preview" src={window.location.href}></iframe>
       </div>
     </div>
   );
