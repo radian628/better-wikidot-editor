@@ -29,6 +29,3 @@ export async function save(source: string) {
     });
   });
 }
-
-//@ts-ignore
-window.wikidotSaveTest = save;

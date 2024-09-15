@@ -11,6 +11,7 @@
 import { createRoot } from "react-dom";
 import { BetterWikidotEditor } from "./BetterWikidotEditor";
 import React from "react";
+import { save } from "./save/save";
 
 const root = document.createElement("div");
 
@@ -26,3 +27,6 @@ editorStylesheet.href =
   "https://radian628.github.io/better-wikidot-editor/build/index.css";
 
 document.head.appendChild(editorStylesheet);
+
+//@ts-ignore
+window.wikidotSaveTest = save;
