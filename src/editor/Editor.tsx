@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
-import { defaultKeymap } from "@codemirror/commands";
+import { defaultKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, keymap } from "@codemirror/view";
 import { save } from "../save/save";
 
@@ -19,7 +19,9 @@ export function Editor(props: {
       doc: props.text,
       extensions: [
         keymap.of(defaultKeymap),
+
         keymap.of([
+          indentWithTab,
           {
             key: "Ctrl-s",
             run: (view) => {
