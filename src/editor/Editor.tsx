@@ -27,9 +27,11 @@ export function Editor(props: {
           {
             key: "Ctrl-s",
             run: (view) => {
-              save(view.state.doc.toString()).then(() => {
+              save(view.state.doc.toString()).then(async () => {
                 props.onSave();
-                resetLock();
+                await resetLock();
+                const html = document.querySelector("html");
+                if (html) html.scrollTop = 0;
               });
               return true;
             },

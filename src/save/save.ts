@@ -31,17 +31,18 @@ export async function save(source: string) {
 }
 
 export async function resetLock() {
-  const params: any = {};
-  const page_id = WIKIREQUEST.info.pageId;
-  params.mode = "page";
-  params.wiki_page = WIKIREQUEST.info.requestPageName;
-  if (page_id != null) {
-    params.page_id = page_id;
-  }
+  return new Promise<void>((resolve, reject) => {
+    const params: any = {};
+    const page_id = WIKIREQUEST.info.pageId;
+    params.mode = "page";
+    params.wiki_page = WIKIREQUEST.info.requestPageName;
+    if (page_id != null) {
+      params.page_id = page_id;
+    }
 
-  OZONE.ajax.requestModule(
-    "edit/PageEditModule",
-    params,
-    WIKIDOT.page.callbacks.editClick
-  );
+    OZONE.ajax.requestModule("edit/PageEditModule", params, (...args) => {
+      WIKIDOT.page.callbacks.editClick(...args);
+      resolve();
+    });
+  });
 }
