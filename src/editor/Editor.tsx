@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
 import { defaultKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, keymap } from "@codemirror/view";
-import { save } from "../save/save";
+import { resetLock, save } from "../save/save";
+import { wikitextElementAutocomplete } from "./autocomplete";
 
 export function Editor(props: {
   text: string;
@@ -18,6 +19,7 @@ export function Editor(props: {
     const initState = EditorState.create({
       doc: props.text,
       extensions: [
+        wikitextElementAutocomplete,
         keymap.of(defaultKeymap),
 
         keymap.of([
@@ -27,6 +29,7 @@ export function Editor(props: {
             run: (view) => {
               save(view.state.doc.toString()).then(() => {
                 props.onSave();
+                resetLock();
               });
               return true;
             },
