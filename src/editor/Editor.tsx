@@ -43,12 +43,6 @@ export function Editor(props: {
             stopPropagation: true,
           },
         ]),
-
-        EditorView.theme({
-          ".cm-editor": {
-            height: "100%",
-          },
-        }),
       ],
     });
 
@@ -60,7 +54,7 @@ export function Editor(props: {
 
   return (
     <div
-      style={{ color: "black", height: "100%" }}
+      style={{ color: "black", height: "100%", overflow: "auto" }}
       ref={editorContainerRef}
     ></div>
   );
