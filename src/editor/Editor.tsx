@@ -58,5 +58,10 @@ export function Editor(props: {
     });
   }, []);
 
-  return <div style={{ color: "black" }} ref={editorContainerRef}></div>;
+  return (
+    <div
+      style={{ color: "black", height: "100%" }}
+      ref={editorContainerRef}
+    ></div>
+  );
 }
