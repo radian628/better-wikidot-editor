@@ -44,7 +44,9 @@ export async function resetLock() {
       // this is an incredibly stupid idea
       const setTimeout = window.setTimeout;
       // @ts-expect-error redefining setTimeout
-      window.setTimeout = () => {};
+      window.setTimeout = (...args) => {
+        console.log("CALLED SETTIMEOUT!!!!!!", args);
+      };
       WIKIDOT.page.callbacks.editClick(...args);
       window.setTimeout = setTimeout;
       resolve();
