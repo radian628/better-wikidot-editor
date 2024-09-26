@@ -30,10 +30,10 @@ export function Editor(props: {
               save(view.state.doc.toString()).then(async () => {
                 props.onSave();
                 await resetLock();
-                // setTimeout(() => {
-                //   const html = document.querySelector("html");
-                //   if (html) html.scrollTop = 0;
-                // }, 300);
+                setTimeout(() => {
+                  const html = document.querySelector("html");
+                  if (html) html.scrollTop = 0;
+                }, 300);
               });
               return true;
             },
