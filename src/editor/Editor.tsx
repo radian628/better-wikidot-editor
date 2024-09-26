@@ -33,6 +33,7 @@ export function Editor(props: {
                 setTimeout(() => {
                   const html = document.querySelector("html");
                   if (html) html.scrollTop = 0;
+                  view.focus();
                 }, 100);
               });
               return true;
