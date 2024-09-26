@@ -33,7 +33,7 @@ export function Editor(props: {
                 setTimeout(() => {
                   const html = document.querySelector("html");
                   if (html) html.scrollTop = 0;
-                }, 1500);
+                }, 300);
               });
               return true;
             },
