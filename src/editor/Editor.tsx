@@ -43,6 +43,12 @@ export function Editor(props: {
             stopPropagation: true,
           },
         ]),
+
+        EditorView.theme({
+          ".cm-editor": {
+            height: "100%",
+          },
+        }),
       ],
     });
 
