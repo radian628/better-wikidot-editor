@@ -20,6 +20,7 @@ export function Editor(props: {
       doc: props.text,
       extensions: [
         wikitextElementAutocomplete,
+        EditorView.lineWrapping,
         keymap.of(defaultKeymap),
 
         keymap.of([
