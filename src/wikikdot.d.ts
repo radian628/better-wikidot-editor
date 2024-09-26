@@ -27,6 +27,7 @@ declare namespace WIKIDOT {
         let id: any;
         let secret: any;
         let revisionId: any;
+        let timeLeft: any;
       }
     }
   }
