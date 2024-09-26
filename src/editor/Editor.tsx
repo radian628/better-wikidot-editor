@@ -52,5 +52,5 @@ export function Editor(props: {
     });
   }, []);
 
-  return <div ref={editorContainerRef}></div>;
+  return <div style={{ color: "black" }} ref={editorContainerRef}></div>;
 }
