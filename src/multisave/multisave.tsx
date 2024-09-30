@@ -35,9 +35,17 @@ function FilePreview(props: { file: File }) {
   return <div>N/A</div>;
 }
 
-function SingleFileTableRow(props: { file: File; delete: () => void }) {
+function SingleFileTableRow(props: {
+  file: File;
+  delete: () => void;
+  uploaded: boolean;
+}) {
   return (
-    <tr>
+    <tr
+      className={
+        props.uploaded ? "multisave-uploaded-file" : "multisave-local-file"
+      }
+    >
       <td>{props.file.name}</td>
       <td title={props.file.size + " bytes"}>
         {fileSizePreview(props.file.size)}
@@ -51,9 +59,9 @@ function SingleFileTableRow(props: { file: File; delete: () => void }) {
 }
 
 export function MultisaveDialog(props: { exit: () => void }) {
-  const [stagedFiles, setStagedFiles] = useState<{ file: File; key: number }[]>(
-    []
-  );
+  const [stagedFiles, setStagedFiles] = useState<
+    { file: File; key: number; uploaded: boolean }[]
+  >([]);
   const currentFileKey = useRef(0);
   return (
     <div className="multisave-dialog">
@@ -73,6 +81,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               stagedFilesCopy.push({
                 file,
                 key: currentFileKey.current++,
+                uploaded: false,
               });
             }
             setStagedFiles(stagedFilesCopy);
@@ -87,6 +96,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <th>Name</th>
               <th>Size</th>
               <th>Preview</th>
+              <th>Uploaded</th>
               <th></th>
             </tr>
           </thead>
@@ -95,6 +105,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <SingleFileTableRow
                 key={f.key}
                 file={f.file}
+                uploaded={f.uploaded}
                 delete={() => {
                   setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
                 }}
