@@ -85,6 +85,14 @@ type FileInfo = {
   };
 };
 
+const requestModuleAsync = async (str: string, payload: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    return OZONE.ajax.requestModule(str, payload, (result) => {
+      resolve(result);
+    });
+  });
+};
+
 export function MultisaveDialog(props: { exit: () => void }) {
   const [stagedFiles, setStagedFiles] = useState<FileInfo[]>([]);
 
@@ -165,7 +173,49 @@ export function MultisaveDialog(props: { exit: () => void }) {
             e.target.files = null;
           }}
         ></input>
-        <button>Save All</button>
+        <button
+          onClick={async () => {
+            const promises: Promise<any>[] = [];
+            for (const file of stagedFiles) {
+              if (file.nameChange && file.uploadedFileId) {
+                promises.push(
+                  requestModuleAsync("Empty", {
+                    file_id: file.uploadedFileId,
+                    new_name: file.name,
+                    action: "FileAction",
+                    event: "renameFile",
+                  })
+                );
+              } else if (!file.uploadedFileId && file.file) {
+                const formdata = new FormData();
+                formdata.append("action", "FileAction");
+                formdata.append("event", "uploadFile");
+                formdata.append("page_id", WIKIREQUEST.info.pageId);
+                formdata.append("MAX_FILE_SIZE", "209715200");
+                formdata.append("userfile", file.file);
+                formdata.append("dfilename", "");
+                formdata.append("comments", "");
+                promises.push(
+                  fetch(
+                    window.location.origin +
+                      "/default--flow/files__UploadTarget",
+                    {
+                      method: "post",
+                      body: formdata,
+                    }
+                  )
+                );
+              }
+            }
+
+            await Promise.all(promises);
+
+            setStagedFiles([]);
+            setHasFetchedUploads(false);
+          }}
+        >
+          Save All
+        </button>
         <button onClick={props.exit}>Exit</button>
       </div>
       <div className="multisave-dialog-scroll">
@@ -186,7 +236,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
                 file={f}
                 uploaded={f.uploadedFileId !== undefined && !f.nameChange}
                 rename={(name) => {
-                  const newFile = { ...f, name };
+                  const newFile: FileInfo = { ...f, name };
                   if (!newFile.nameChange) {
                     newFile.nameChange = { oldName: f.name };
                   }
