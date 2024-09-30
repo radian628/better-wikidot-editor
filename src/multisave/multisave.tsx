@@ -11,13 +11,13 @@ function fileSizePreview(size: number) {
   }
 
   if (size > 1_000) {
-    return (size / 1_000).toFixed(2) + " KB";
+    return (size / 1_000).toFixed(2) + " kB";
   }
 
   return size + " bytes";
 }
 
-function FilePreview(props: { file: File }) {
+function FilePreview(props: { file: Blob }) {
   const [url, setURL] = useState<string>();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function FilePreview(props: { file: File }) {
 }
 
 function SingleFileTableRow(props: {
-  file: File;
+  file: FileInfo;
   delete: () => void;
   uploaded: boolean;
 }) {
@@ -50,7 +50,13 @@ function SingleFileTableRow(props: {
       <td title={props.file.size + " bytes"}>
         {fileSizePreview(props.file.size)}
       </td>
-      <td>{<FilePreview file={props.file}></FilePreview>}</td>
+      <td>
+        {props.file.file ? (
+          <FilePreview file={props.file.file}></FilePreview>
+        ) : (
+          <>Loading...</>
+        )}
+      </td>
       <td>{props.uploaded ? "✔" : ""}</td>
       <td>
         <button onClick={props.delete}>🗙</button>
@@ -59,10 +65,16 @@ function SingleFileTableRow(props: {
   );
 }
 
+type FileInfo = {
+  name: string;
+  size: number;
+  file?: Blob;
+  key: number;
+  uploaded: boolean;
+};
+
 export function MultisaveDialog(props: { exit: () => void }) {
-  const [stagedFiles, setStagedFiles] = useState<
-    { file: File; key: number; uploaded: boolean }[]
-  >([]);
+  const [stagedFiles, setStagedFiles] = useState<FileInfo[]>([]);
 
   const [hasFetchedUploads, setHasFetchedUploads] = useState(false);
 
@@ -71,8 +83,40 @@ export function MultisaveDialog(props: { exit: () => void }) {
     OZONE.ajax.requestModule(
       "files/PageFilesModule",
       { page_id: WIKIREQUEST.info.pageId },
-      (...args) => {
-        console.log("ARGS", args);
+      (response) => {
+        const filesListHTML = response.body;
+        const filesListTreeRoot = document.createElement("html");
+        filesListTreeRoot.innerHTML = filesListHTML;
+
+        const filesListTable = filesListTreeRoot.querySelector("table");
+
+        if (!filesListTable) {
+          setHasFetchedUploads(true);
+          return;
+        }
+
+        const uploadedFiles: FileInfo[] = [];
+
+        for (const singleFileInfo of filesListTable.querySelectorAll("tr")) {
+          const name = singleFileInfo.children[0].querySelector("a")!.innerText;
+          const sizeStr = (singleFileInfo.children[2] as HTMLElement).innerText;
+          const size =
+            parseFloat(sizeStr) *
+            (sizeStr.endsWith("GB")
+              ? 1_000_000_000
+              : sizeStr.endsWith("MB")
+              ? 1_000_000
+              : sizeStr.endsWith("kB")
+              ? 1_000
+              : 1);
+
+          uploadedFiles.push({
+            name,
+            size,
+            key: currentFileKey.current++,
+            uploaded: true,
+          });
+        }
       }
     );
   }, [hasFetchedUploads]);
@@ -81,9 +125,6 @@ export function MultisaveDialog(props: { exit: () => void }) {
   return (
     <div className="multisave-dialog">
       <div className="multisave-header">
-        <button style={{ float: "right" }} onClick={props.exit}>
-          Exit
-        </button>
         <input
           type="file"
           multiple
@@ -95,6 +136,8 @@ export function MultisaveDialog(props: { exit: () => void }) {
             for (const file of files) {
               stagedFilesCopy.push({
                 file,
+                name: file.name,
+                size: file.size,
                 key: currentFileKey.current++,
                 uploaded: false,
               });
@@ -103,6 +146,8 @@ export function MultisaveDialog(props: { exit: () => void }) {
             e.target.files = null;
           }}
         ></input>
+        <button>Save All</button>
+        <button onClick={props.exit}>Exit</button>
       </div>
       <div className="multisave-dialog-scroll">
         <table>
@@ -111,7 +156,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <th>Name</th>
               <th>Size</th>
               <th>Preview</th>
-              <th>Uploaded?</th>
+              <th>Saved?</th>
               <th></th>
             </tr>
           </thead>
@@ -119,7 +164,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
             {stagedFiles.map((f, i) => (
               <SingleFileTableRow
                 key={f.key}
-                file={f.file}
+                file={f}
                 uploaded={f.uploaded}
                 delete={() => {
                   setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
