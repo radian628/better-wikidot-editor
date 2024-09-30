@@ -51,6 +51,7 @@ function SingleFileTableRow(props: {
         {fileSizePreview(props.file.size)}
       </td>
       <td>{<FilePreview file={props.file}></FilePreview>}</td>
+      <td>{props.uploaded ? "Uploaded" : "Local"}</td>
       <td>
         <button onClick={props.delete}>🗙</button>
       </td>
