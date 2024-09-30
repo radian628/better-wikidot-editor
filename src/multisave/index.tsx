@@ -37,3 +37,10 @@ const interval = setInterval(() => {
     );
   });
 }, 0);
+
+const editorStylesheet = document.createElement("link");
+editorStylesheet.rel = "stylesheet";
+editorStylesheet.href =
+  "https://radian628.github.io/better-wikidot-editor/build/multisave/index.css";
+
+document.head.appendChild(editorStylesheet);

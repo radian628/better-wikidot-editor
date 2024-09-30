@@ -1,1 +1,1 @@
-.multisave-dialog{position:fixed;top:25%;left:25%;width:50%;height:50%}
+.multisave-dialog{position:fixed;top:25%;left:25%;width:50%;height:50%;background-color:#000;border:1px solid #999999;border-radius:10px;padding:10px;filter:drop-shadow(0 0 15px black)}
