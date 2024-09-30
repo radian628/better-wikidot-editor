@@ -12,9 +12,12 @@
 const interval = setInterval(() => {
   const filesClick = WIKIDOT?.page?.listeners?.filesClick;
 
-  WIKIDOT.page.listeners.filesClick = (...args) => {
-    console.log(args);
-  };
-
-  if (filesClick as any) clearInterval(interval);
+  console.log("a");
+  if (filesClick as any) {
+    console.log("b");
+    WIKIDOT.page.listeners.filesClick = (...args) => {
+      console.log(args);
+    };
+    clearInterval(interval);
+  }
 }, 0);

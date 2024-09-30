@@ -1,4 +1,4 @@
-(()=>{var s=setInterval(()=>{let e=WIKIDOT?.page?.listeners?.filesClick;WIKIDOT.page.listeners.filesClick=(...l)=>{console.log(l)},e&&clearInterval(s)},0);})();
+(()=>{var s=setInterval(()=>{let l=WIKIDOT?.page?.listeners?.filesClick;console.log("a"),l&&(console.log("b"),WIKIDOT.page.listeners.filesClick=(...e)=>{console.log(e)},clearInterval(s))},0);})();
 /*!
 // ==UserScript==
 // @name        Wikidot File Multisave 
