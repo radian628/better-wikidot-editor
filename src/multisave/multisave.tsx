@@ -113,7 +113,9 @@ export function MultisaveDialog(props: { exit: () => void }) {
 
         for (const singleFileInfo of filesListTable.querySelectorAll("tr")) {
           const name = singleFileInfo.children[0].querySelector("a")!.innerText;
-          const sizeStr = (singleFileInfo.children[2] as HTMLElement).innerText;
+          const sizeStr = (
+            singleFileInfo.children[2] as HTMLElement
+          ).innerText.trim();
           console.log("sizeStr", sizeStr);
           const size =
             parseFloat(sizeStr) *
