@@ -88,7 +88,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
         const filesListTreeRoot = document.createElement("html");
         filesListTreeRoot.innerHTML = filesListHTML;
 
-        const filesListTable = filesListTreeRoot.querySelector("table");
+        const filesListTable = filesListTreeRoot.querySelector("tbody");
 
         if (!filesListTable) {
           setHasFetchedUploads(true);
