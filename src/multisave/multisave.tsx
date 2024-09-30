@@ -117,6 +117,9 @@ export function MultisaveDialog(props: { exit: () => void }) {
             uploaded: true,
           });
         }
+
+        setHasFetchedUploads(true);
+        setStagedFiles([...stagedFiles, ...uploadedFiles]);
       }
     );
   }, [hasFetchedUploads]);
