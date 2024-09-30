@@ -1,1 +1,56 @@
-.multisave-dialog{position:fixed;top:15%;left:15%;width:70%;height:70%;background-color:#fff;border:1px solid #666666;border-radius:10px;padding:10px;filter:drop-shadow(0 0 15px black);display:flex;flex-direction:column}.multisave-dialog .multisave-dialog-scroll{overflow:auto;border-radius:10px;border:1px solid #666666;flex-grow:1}.multisave-dialog table{border-collapse:collapse;width:100%}.multisave-dialog tr{border-bottom:1px solid #bbbbbb}.multisave-dialog td,.multisave-dialog th{padding:10px}.multisave-dialog th{text-align:left}.multisave-image-preview{max-height:100px;border:1px dotted black}.multisave-header{background-color:#fff;padding-bottom:10px;display:flex;justify-content:space-between}.multisave-uploaded-file{background-color:#bee8be}.multisave-loading-div{width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:200%}
+/* src/multisave/multisave.less */
+.multisave-dialog {
+  position: fixed;
+  top: 15%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
+  background-color: white;
+  border: 1px solid #666666;
+  border-radius: 10px;
+  padding: 10px;
+  filter: drop-shadow(0 0 15px black);
+  display: flex;
+  flex-direction: column;
+}
+.multisave-dialog .multisave-dialog-scroll {
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid #666666;
+  flex-grow: 1;
+}
+.multisave-dialog table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.multisave-dialog tr {
+  border-bottom: 1px solid #bbbbbb;
+}
+.multisave-dialog td,
+.multisave-dialog th {
+  padding: 10px;
+}
+.multisave-dialog th {
+  text-align: left;
+}
+.multisave-image-preview {
+  max-height: 100px;
+  border: 1px dotted black;
+}
+.multisave-header {
+  background-color: white;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.multisave-uploaded-file {
+  background-color: #bee8be;
+}
+.multisave-loading-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 200%;
+}
