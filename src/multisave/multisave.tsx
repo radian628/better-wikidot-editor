@@ -51,7 +51,7 @@ function SingleFileTableRow(props: {
         {fileSizePreview(props.file.size)}
       </td>
       <td>{<FilePreview file={props.file}></FilePreview>}</td>
-      <td>{props.uploaded ? "Uploaded" : "Local"}</td>
+      <td>{props.uploaded ? "✔" : ""}</td>
       <td>
         <button onClick={props.delete}>🗙</button>
       </td>
@@ -63,6 +63,20 @@ export function MultisaveDialog(props: { exit: () => void }) {
   const [stagedFiles, setStagedFiles] = useState<
     { file: File; key: number; uploaded: boolean }[]
   >([]);
+
+  const [hasFetchedUploads, setHasFetchedUploads] = useState(false);
+
+  useEffect(() => {
+    if (hasFetchedUploads) return;
+    OZONE.ajax.requestModule(
+      "files/PageFilesModule",
+      { page_id: WIKIREQUEST.info.pageId },
+      (...args) => {
+        console.log("ARGS", args);
+      }
+    );
+  }, [hasFetchedUploads]);
+
   const currentFileKey = useRef(0);
   return (
     <div className="multisave-dialog">
@@ -97,7 +111,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <th>Name</th>
               <th>Size</th>
               <th>Preview</th>
-              <th>Uploaded</th>
+              <th>Uploaded?</th>
               <th></th>
             </tr>
           </thead>
