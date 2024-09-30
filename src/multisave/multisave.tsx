@@ -57,27 +57,29 @@ export function MultisaveDialog(props: { exit: () => void }) {
   const currentFileKey = useRef(0);
   return (
     <div className="multisave-dialog">
-      <button style={{ float: "right" }} onClick={props.exit}>
-        Exit
-      </button>
-      <input
-        type="file"
-        multiple
-        onChange={(e) => {
-          const files = e.target.files;
-          if (!files) return;
+      <div className="multisave-header">
+        <button style={{ float: "right" }} onClick={props.exit}>
+          Exit
+        </button>
+        <input
+          type="file"
+          multiple
+          onChange={(e) => {
+            const files = e.target.files;
+            if (!files) return;
 
-          const stagedFilesCopy = [...stagedFiles];
-          for (const file of files) {
-            stagedFilesCopy.push({
-              file,
-              key: currentFileKey.current++,
-            });
-          }
-          setStagedFiles(stagedFilesCopy);
-          e.target.files = null;
-        }}
-      ></input>
+            const stagedFilesCopy = [...stagedFiles];
+            for (const file of files) {
+              stagedFilesCopy.push({
+                file,
+                key: currentFileKey.current++,
+              });
+            }
+            setStagedFiles(stagedFilesCopy);
+            e.target.files = null;
+          }}
+        ></input>
+      </div>
       <table>
         <thead>
           <tr>
