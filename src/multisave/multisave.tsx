@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import "./multisave.less";
 
 function fileSizePreview(size: number) {
-  if (size > 1_000_000_000) {
-    return (size / 1_000_000_000).toFixed(2) + " GB";
+  if (size > 2 ** 30) {
+    return (size / 2 ** 30).toFixed(2) + " GB";
   }
 
-  if (size > 1_000_000) {
-    return (size / 1_000_000).toFixed(2) + " MB";
+  if (size > 2 ** 20) {
+    return (size / 2 ** 20).toFixed(2) + " MB";
   }
 
-  if (size > 1_000) {
-    return (size / 1_000).toFixed(2) + " kB";
+  if (size > 2 ** 10) {
+    return (size / 2 ** 10).toFixed(2) + " kB";
   }
 
   return size + " bytes";
@@ -38,6 +38,7 @@ function FilePreview(props: { file: Blob }) {
 function SingleFileTableRow(props: {
   file: FileInfo;
   delete: () => void;
+  rename: (name: string) => void;
   uploaded: boolean;
 }) {
   return (
@@ -46,7 +47,15 @@ function SingleFileTableRow(props: {
         props.uploaded ? "multisave-uploaded-file" : "multisave-local-file"
       }
     >
-      <td>{props.file.name}</td>
+      <td>
+        <input
+          type="text"
+          value={props.file.name}
+          onInput={(e) => {
+            props.rename(e.currentTarget.value);
+          }}
+        ></input>
+      </td>
       <td title={props.file.size + " bytes"}>
         {fileSizePreview(props.file.size)}
       </td>
@@ -71,6 +80,9 @@ type FileInfo = {
   file?: Blob;
   key: number;
   uploaded: boolean;
+  nameChange?: {
+    oldName: string;
+  };
 };
 
 export function MultisaveDialog(props: { exit: () => void }) {
@@ -102,14 +114,15 @@ export function MultisaveDialog(props: { exit: () => void }) {
         for (const singleFileInfo of filesListTable.querySelectorAll("tr")) {
           const name = singleFileInfo.children[0].querySelector("a")!.innerText;
           const sizeStr = (singleFileInfo.children[2] as HTMLElement).innerText;
+          console.log("sizeStr", sizeStr);
           const size =
             parseFloat(sizeStr) *
             (sizeStr.endsWith("GB")
-              ? 1_000_000_000
+              ? 2 ** 30
               : sizeStr.endsWith("MB")
-              ? 1_000_000
+              ? 2 ** 20
               : sizeStr.endsWith("kB")
-              ? 1_000
+              ? 2 ** 10
               : 1);
 
           uploadedFiles.push({
@@ -171,6 +184,15 @@ export function MultisaveDialog(props: { exit: () => void }) {
                 key={f.key}
                 file={f}
                 uploaded={f.uploaded}
+                rename={(name) => {
+                  const newFile = { ...f };
+                  if (!newFile.nameChange) {
+                    newFile.nameChange = { oldName: f.name };
+                  }
+                  setStagedFiles(
+                    stagedFiles.map((f2, j) => (i === j ? newFile : f2))
+                  );
+                }}
                 delete={() => {
                   setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
                 }}
