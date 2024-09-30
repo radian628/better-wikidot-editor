@@ -80,27 +80,29 @@ export function MultisaveDialog(props: { exit: () => void }) {
           }}
         ></input>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Preview</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {stagedFiles.map((f, i) => (
-            <SingleFileTableRow
-              key={f.key}
-              file={f.file}
-              delete={() => {
-                setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
-              }}
-            ></SingleFileTableRow>
-          ))}
-        </tbody>
-      </table>
+      <div className="multisave-dialog-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Preview</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {stagedFiles.map((f, i) => (
+              <SingleFileTableRow
+                key={f.key}
+                file={f.file}
+                delete={() => {
+                  setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
+                }}
+              ></SingleFileTableRow>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
