@@ -79,7 +79,7 @@ type FileInfo = {
   size: number;
   file?: Blob;
   key: number;
-  uploaded: boolean;
+  uploadedFileId?: string;
   nameChange?: {
     oldName: string;
   };
@@ -131,7 +131,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
             name,
             size,
             key: currentFileKey.current++,
-            uploaded: true,
+            uploadedFileId: singleFileInfo.id.match(/[0-9]+$/)![0],
           });
         }
 
@@ -159,7 +159,6 @@ export function MultisaveDialog(props: { exit: () => void }) {
                 name: file.name,
                 size: file.size,
                 key: currentFileKey.current++,
-                uploaded: false,
               });
             }
             setStagedFiles(stagedFilesCopy);
@@ -185,7 +184,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <SingleFileTableRow
                 key={f.key}
                 file={f}
-                uploaded={f.uploaded}
+                uploaded={f.uploadedFileId !== undefined}
                 rename={(name) => {
                   const newFile = { ...f };
                   if (!newFile.nameChange) {
@@ -196,6 +195,29 @@ export function MultisaveDialog(props: { exit: () => void }) {
                   );
                 }}
                 delete={() => {
+                  // if it's uploaded...
+                  if (f.uploadedFileId) {
+                    // delete the file from remote
+                    OZONE.ajax.requestModule(
+                      "Empty",
+                      {
+                        file_id: f.uploadedFileId,
+                        action: "FileAction",
+                        event: "deleteFile",
+                      },
+
+                      () => {
+                        // once deleted, recheck to make sure it's actually gone
+                        setStagedFiles(
+                          stagedFiles.filter((f) => !f.uploadedFileId)
+                        );
+                        setHasFetchedUploads(false);
+                      }
+                    );
+                  }
+
+                  // remove the file from the list
+                  // so that there's instant feedback
                   setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
                 }}
               ></SingleFileTableRow>
