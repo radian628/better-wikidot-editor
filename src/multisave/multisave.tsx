@@ -29,7 +29,7 @@ function FilePreview(props: { file: File }) {
   }, [props.file]);
 
   if (props.file.type.startsWith("image")) {
-    if (url) return <img src={url}></img>;
+    if (url) return <img className="multisave-image-preview" src={url}></img>;
     return <div>Loading...</div>;
   }
   return <div>N/A</div>;
@@ -57,7 +57,9 @@ export function MultisaveDialog(props: { exit: () => void }) {
   const currentFileKey = useRef(0);
   return (
     <div className="multisave-dialog">
-      <button onClick={props.exit}>Exit</button>
+      <button style={{ float: "right" }} onClick={props.exit}>
+        Exit
+      </button>
       <input
         type="file"
         multiple
