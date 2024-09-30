@@ -184,7 +184,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
               <SingleFileTableRow
                 key={f.key}
                 file={f}
-                uploaded={f.uploadedFileId !== undefined}
+                uploaded={f.uploadedFileId !== undefined && !f.nameChange}
                 rename={(name) => {
                   const newFile = { ...f };
                   if (!newFile.nameChange) {
