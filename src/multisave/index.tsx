@@ -1,3 +1,7 @@
+import { createRoot } from "react-dom/client";
+import { MultisaveDialog } from "./multisave";
+import React from "react";
+
 /*!
 // ==UserScript==
 // @name        Wikidot File Multisave 
@@ -22,6 +26,14 @@ const interval = setInterval(() => {
 
   // add listener that will open the custom file dialog
   buttonClone.addEventListener("click", () => {
-    console.log(" do stuff here ");
+    const root = document.createElement("div");
+    document.body.appendChild(root);
+    createRoot(root).render(
+      <MultisaveDialog
+        exit={() => {
+          document.body.removeChild(root);
+        }}
+      ></MultisaveDialog>
+    );
   });
 }, 0);
