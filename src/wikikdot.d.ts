@@ -30,6 +30,10 @@ declare namespace WIKIDOT {
         let timeLeft: any;
       }
     }
+
+    namespace listeners {
+      let filesClick: (a: any) => any;
+    }
   }
 }
 
