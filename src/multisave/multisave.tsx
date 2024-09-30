@@ -105,6 +105,8 @@ export function MultisaveDialog(props: { exit: () => void }) {
 
   const [hasFetchedUploads, setHasFetchedUploads] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     if (hasFetchedUploads) return;
     OZONE.ajax.requestModule(
@@ -119,6 +121,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
 
         if (!filesListTable) {
           setHasFetchedUploads(true);
+          setIsLoading(false);
           return;
         }
 
@@ -151,6 +154,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
         }
 
         setHasFetchedUploads(true);
+        setIsLoading(false);
         setStagedFiles([...stagedFiles, ...uploadedFiles]);
       }
     );
@@ -215,7 +219,11 @@ export function MultisaveDialog(props: { exit: () => void }) {
               }
             }
 
+            setIsLoading(true);
+
             await Promise.all(promises);
+
+            setIsLoading(false);
 
             setStagedFiles([]);
             setHasFetchedUploads(false);
@@ -226,61 +234,65 @@ export function MultisaveDialog(props: { exit: () => void }) {
         <button onClick={props.exit}>Exit</button>
       </div>
       <div className="multisave-dialog-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Size</th>
-              <th>Preview</th>
-              <th>Saved?</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {stagedFiles.map((f, i) => (
-              <SingleFileTableRow
-                key={f.key}
-                file={f}
-                uploaded={f.uploadedFileId !== undefined && !f.nameChange}
-                rename={(name) => {
-                  const newFile: FileInfo = { ...f, name };
-                  if (!newFile.nameChange) {
-                    newFile.nameChange = { oldName: f.name };
-                  }
-                  setStagedFiles(
-                    stagedFiles.map((f2, j) => (i === j ? newFile : f2))
-                  );
-                }}
-                delete={() => {
-                  // if it's uploaded...
-                  if (f.uploadedFileId) {
-                    // delete the file from remote
-                    OZONE.ajax.requestModule(
-                      "Empty",
-                      {
-                        file_id: f.uploadedFileId,
-                        action: "FileAction",
-                        event: "deleteFile",
-                      },
-
-                      () => {
-                        // once deleted, recheck to make sure it's actually gone
-                        setStagedFiles(
-                          stagedFiles.filter((f) => !f.uploadedFileId)
-                        );
-                        setHasFetchedUploads(false);
-                      }
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Preview</th>
+                <th>Saved?</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {stagedFiles.map((f, i) => (
+                <SingleFileTableRow
+                  key={f.key}
+                  file={f}
+                  uploaded={f.uploadedFileId !== undefined && !f.nameChange}
+                  rename={(name) => {
+                    const newFile: FileInfo = { ...f, name };
+                    if (!newFile.nameChange) {
+                      newFile.nameChange = { oldName: f.name };
+                    }
+                    setStagedFiles(
+                      stagedFiles.map((f2, j) => (i === j ? newFile : f2))
                     );
-                  }
+                  }}
+                  delete={() => {
+                    // if it's uploaded...
+                    if (f.uploadedFileId) {
+                      // delete the file from remote
+                      OZONE.ajax.requestModule(
+                        "Empty",
+                        {
+                          file_id: f.uploadedFileId,
+                          action: "FileAction",
+                          event: "deleteFile",
+                        },
 
-                  // remove the file from the list
-                  // so that there's instant feedback
-                  setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
-                }}
-              ></SingleFileTableRow>
-            ))}
-          </tbody>
-        </table>
+                        () => {
+                          // once deleted, recheck to make sure it's actually gone
+                          setStagedFiles(
+                            stagedFiles.filter((f) => !f.uploadedFileId)
+                          );
+                          setHasFetchedUploads(false);
+                        }
+                      );
+                    }
+
+                    // remove the file from the list
+                    // so that there's instant feedback
+                    setStagedFiles(stagedFiles.filter((f2, j) => i !== j));
+                  }}
+                ></SingleFileTableRow>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
