@@ -63,7 +63,14 @@ function SingleFileTableRow(props: {
         {props.file.file ? (
           <FilePreview file={props.file.file}></FilePreview>
         ) : (
-          <>Loading...</>
+          <a
+            href={`/local--files/${WIKIREQUEST.info.requestPageName}/${
+              props.file.nameChange?.oldName ?? props.file.name
+            }`}
+            target="_blank"
+          >
+            Link
+          </a>
         )}
       </td>
       <td>{props.uploaded ? "✔" : ""}</td>
