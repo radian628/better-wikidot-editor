@@ -11,8 +11,16 @@
   filter: drop-shadow(0 0 15px black);
   overflow: auto;
 
-  tr:nth-child(2) {
+  table {
+    border-collapse: collapse;
+  }
+
+  tr:nth-child(2n) {
     background-color: #eeeeee;
+  }
+
+  td {
+    padding: 10px;
   }
 }
 
