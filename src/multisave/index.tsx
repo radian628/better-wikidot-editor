@@ -9,8 +9,12 @@
 // ==/UserScript==
 */
 
-const filesClick = WIKIDOT.page.listeners.filesClick;
+const interval = setInterval(() => {
+  const filesClick = WIKIDOT?.page?.listeners?.filesClick;
 
-WIKIDOT.page.listeners.filesClick = (...args) => {
-  console.log(args);
-};
+  WIKIDOT.page.listeners.filesClick = (...args) => {
+    console.log(args);
+  };
+
+  if (filesClick as any) clearInterval(interval);
+}, 0);

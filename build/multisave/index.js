@@ -1,4 +1,4 @@
-(()=>{var l=WIKIDOT.page.listeners.filesClick;WIKIDOT.page.listeners.filesClick=(...e)=>{console.log(e)};})();
+(()=>{var s=setInterval(()=>{let e=WIKIDOT?.page?.listeners?.filesClick;WIKIDOT.page.listeners.filesClick=(...l)=>{console.log(l)},e&&clearInterval(s)},0);})();
 /*!
 // ==UserScript==
 // @name        Wikidot File Multisave 
