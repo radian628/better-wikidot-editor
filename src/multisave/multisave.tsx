@@ -186,7 +186,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
                 file={f}
                 uploaded={f.uploadedFileId !== undefined && !f.nameChange}
                 rename={(name) => {
-                  const newFile = { ...f };
+                  const newFile = { ...f, name };
                   if (!newFile.nameChange) {
                     newFile.nameChange = { oldName: f.name };
                   }
