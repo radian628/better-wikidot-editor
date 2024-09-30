@@ -235,7 +235,7 @@ export function MultisaveDialog(props: { exit: () => void }) {
       </div>
       <div className="multisave-dialog-scroll">
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="multisave-loading-div">Loading...</div>
         ) : (
           <table>
             <thead>
