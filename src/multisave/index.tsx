@@ -10,12 +10,18 @@
 */
 
 const interval = setInterval(() => {
-  const filesClick = WIKIDOT?.page?.listeners?.filesClick;
+  // get the file button
+  const filesButton = document.getElementById("files-button") as HTMLElement;
+  if (!filesButton || filesButton.dataset.isClone) return;
 
-  if (filesClick as any) {
-    WIKIDOT.page.listeners.filesClick = (...args) => {
-      console.log("ASDADADASD");
-      console.log(args);
-    };
-  }
+  // replace files button with a clone with no listeners attached to it
+  const buttonClone = filesButton.cloneNode(true) as HTMLElement;
+  buttonClone.dataset.isClone = "true";
+  filesButton.parentElement?.insertBefore(buttonClone, filesButton);
+  filesButton.parentElement?.removeChild(filesButton);
+
+  // add listener that will open the custom file dialog
+  buttonClone.addEventListener("click", () => {
+    console.log(" do stuff here ");
+  });
 }, 0);
