@@ -6,7 +6,7 @@ const ctx = await esbuild.context({
   bundle: true,
   outdir: "build",
   plugins: [lessLoader()],
-  minify: false,
+  minify: true,
 });
 
 await ctx.watch();
