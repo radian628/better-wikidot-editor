@@ -68,6 +68,7 @@ function SingleFileTableRow(props: {
               props.file.nameChange?.oldName ?? props.file.name
             }`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             Link
           </a>
