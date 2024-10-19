@@ -20,7 +20,7 @@ export function Editor(props: {
     const initState = EditorState.create({
       doc: props.text,
       extensions: [
-        wikitextElementAutocomplete,
+        // wikitextElementAutocomplete,
         EditorView.lineWrapping,
         keymap.of(defaultKeymap),
         keymap.of(searchKeymap),
