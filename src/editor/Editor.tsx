@@ -4,6 +4,7 @@ import { defaultKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, keymap } from "@codemirror/view";
 import { resetLock, save } from "../save/save";
 import { wikitextElementAutocomplete } from "./autocomplete";
+import { search } from "@codemirror/search";
 
 export function Editor(props: {
   text: string;
@@ -22,6 +23,7 @@ export function Editor(props: {
         wikitextElementAutocomplete,
         EditorView.lineWrapping,
         keymap.of(defaultKeymap),
+        search(),
 
         keymap.of([
           indentWithTab,
